@@ -28,9 +28,8 @@ def as_tree(
         ) -> Element:
     """ Extract diff between two html pages as a tree (lxml.etree.Element)
     """
-    html, other_html = [_preprocess(x, strip_inline_styles=strip_inline_styles)
-                        for x in [html, other_html]]
-    diff = htmldiff(other_html, html)
+    diff = htmldiff(*[_cleanup(x, strip_inline_styles=strip_inline_styles)
+                      for x in [other_html, html]])
     diff_tree = lxml.html.fromstring(diff)
     additions = set(diff_tree.xpath('//ins'))
     deletions = set(diff_tree.xpath('//del'))
@@ -75,18 +74,20 @@ def htmldiff(old_html, new_html):
     return result
 
 
-def _preprocess(html: str, strip_inline_styles: bool) -> str:
+def _cleanup(html: str, strip_inline_styles: bool) -> Element:
     tree = lxml.html.fromstring(html)
-    # nothing useful is expected in these, but lxml.html.diff can choke on them
-    # TODO - avoid double parsing here
+    # Do cleanup similar to lxml.html.diff.cleanup_html + comments and styles.
+    # It needs to be done since we are passing parsed element here.
     _drop_trees(tree.xpath('//comment()'))
     _drop_trees(tree.xpath('//head'))
     _drop_trees(tree.xpath('//script'))
     _drop_trees(tree.xpath('//style'))
+    _drop_tags(tree.xpath('//ins'))
+    _drop_tags(tree.xpath('//del'))
     if strip_inline_styles:
         for node in tree.xpath('//*[@style]'):
             node.attrib.pop('style')
-    return tree_to_string(tree)
+    return tree
 
 
 def _drop_tags(nodes):
