@@ -41,8 +41,11 @@ this will give you::
 
     '<div><div>My content</div>  </div>'
 
-You can also get diff as a tree (an ``lxml.etree.Element``) if
+You can also get diff as a tree (an ``lxml.html.HtmlElement``) if
 you plan to do additional transformations or change serialization::
 
     extract_html_diff.as_tree(html, other_html)
 
+You can pass input html as ``str`` or ``bytes``
+(it will be parsed with ``lxml.html.fromstring`` in this case), or as an already parsed
+``lxml.html.HtmlElement``.

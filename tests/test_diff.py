@@ -1,8 +1,9 @@
 from pathlib import Path
 import time
 
-import extract_html_diff
+import lxml.html
 
+import extract_html_diff
 from .utils import diff_test
 
 
@@ -17,6 +18,15 @@ def test_as_tree():
     diff_test(
         '<div> <h1>My site</h1> <div>My content</div> </div>',
         '<div> <h1>My site</h1> <div>Other content</div> </div>',
+        '<div><div>My content</div></div>')
+
+
+def test_parsed():
+    diff_test(
+        lxml.html.fromstring(
+            '<div> <h1>My site</h1> <div>My content</div> </div>'),
+        lxml.html.fromstring(
+            '<div> <h1>My site</h1> <div>Other content</div> </div>'),
         '<div><div>My content</div></div>')
 
 

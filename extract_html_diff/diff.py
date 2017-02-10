@@ -1,18 +1,21 @@
 from itertools import chain
+from typing import Union
 
-from lxml.etree import Element
-import lxml.html
+from lxml.html import HtmlElement, fromstring
 import lxml.html.diff as lxml_diff
 
 from .utils import tree_to_string
 
 
+Html = Union[str, bytes, HtmlElement]
+
+
 def as_string(
-        html: str, other_html: str,
+        html: Html, other_html: Html,
         apply_to_siblings: bool=False,
         strip_inline_styles: bool=True
         ) -> str:
-    """ Extract diff between two html pages as html string.
+    """ Extract diff between two html pages as an html string.
     """
     diff_tree = as_tree(
         html, other_html,
@@ -22,15 +25,15 @@ def as_string(
 
 
 def as_tree(
-        html: str, other_html: str,
+        html: Html, other_html: Html,
         apply_to_siblings: bool=False,
         strip_inline_styles: bool=True
-        ) -> Element:
-    """ Extract diff between two html pages as a tree (lxml.etree.Element)
+        ) -> HtmlElement:
+    """ Extract diff between two html pages as a tree (lxml.html.HtmlElement)
     """
     diff = htmldiff(*[_cleanup(x, strip_inline_styles=strip_inline_styles)
                       for x in [other_html, html]])
-    diff_tree = lxml.html.fromstring(diff)
+    diff_tree = fromstring(diff)
     additions = set(diff_tree.xpath('//ins'))
     deletions = set(diff_tree.xpath('//del'))
     colors = Colors()
@@ -74,8 +77,8 @@ def htmldiff(old_html, new_html):
     return result
 
 
-def _cleanup(html: str, strip_inline_styles: bool) -> Element:
-    tree = lxml.html.fromstring(html)
+def _cleanup(html: Html, strip_inline_styles: bool) -> HtmlElement:
+    tree = html if isinstance(html, HtmlElement) else fromstring(html)
     # Do cleanup similar to lxml.html.diff.cleanup_html + comments and styles.
     # It needs to be done since we are passing parsed element here.
     _drop_trees(tree.xpath('//iframe'))
