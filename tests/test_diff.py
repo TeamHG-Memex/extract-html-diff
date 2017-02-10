@@ -1,3 +1,6 @@
+from pathlib import Path
+import time
+
 import extract_html_diff
 
 from .utils import diff_test
@@ -43,3 +46,15 @@ def test_ins_del():
         '<div><div><del>bb</del></div> <div>cc</div> <div><del>dd</del></div></div>',
         '<div><div><del>bb</del></div> <div>c1</div> <div><del>d1</del></div></div>',
         '<div><div>cc</div> <div>dd</div></div>')
+
+
+def test_speed():
+    tests = Path(__file__).parent
+    html_1 = tests.joinpath('html-1.html').read_text()
+    html_2 = tests.joinpath('html-2.html').read_text()
+    n_runs = 1
+    t0 = time.time()
+    for _ in range(n_runs):
+        # as_tree speed is almost the same, so don't bother to check
+        extract_html_diff.as_string(html_1, html_2)
+    print('as_string speed: {:.2f} pages/s'.format(n_runs / (time.time() - t0)))

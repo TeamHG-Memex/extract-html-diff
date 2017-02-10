@@ -78,6 +78,7 @@ def _cleanup(html: str, strip_inline_styles: bool) -> Element:
     tree = lxml.html.fromstring(html)
     # Do cleanup similar to lxml.html.diff.cleanup_html + comments and styles.
     # It needs to be done since we are passing parsed element here.
+    _drop_trees(tree.xpath('//iframe'))
     _drop_trees(tree.xpath('//comment()'))
     _drop_trees(tree.xpath('//head'))
     _drop_trees(tree.xpath('//script'))
@@ -97,7 +98,8 @@ def _drop_tags(nodes):
 
 def _drop_trees(nodes):
     for node in nodes:
-        node.drop_tree()
+        if node.getparent() is not None:
+            node.drop_tree()
 
 
 def _parents(node):
