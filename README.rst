@@ -1,6 +1,10 @@
 extract-html-diff: extract difference between two html pages
 ============================================================
 
+.. image:: https://img.shields.io/pypi/v/extract-html-diff.svg
+   :target: https://pypi.python.org/pypi/extract-html-diff
+   :alt: PyPI Version
+
 .. image:: https://img.shields.io/travis/TeamHG-Memex/extract-html-diff/master.svg
    :target: http://travis-ci.org/TeamHG-Memex/extract-html-diff
    :alt: Build Status
@@ -20,9 +24,9 @@ License is MIT.
 Installaton
 -----------
 
-The package is not on PyPI yet, so please install from source::
+You can install the package from PyPI::
 
-    pip install git+https://github.com/TeamHG-Memex/extract-html-diff.git
+    pip install extract-html-diff
 
 
 Usage
