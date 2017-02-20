@@ -1,6 +1,7 @@
 from pathlib import Path
 import time
 
+import pytest
 import lxml.html
 
 import extract_html_diff
@@ -58,7 +59,8 @@ def test_ins_del():
         '<div><div>cc</div> <div>dd</div></div>')
 
 
-def test_speed():
+@pytest.mark.parametrize(['apply_to_siblings'], [[False], [True]])
+def test_speed(apply_to_siblings):
     tests = Path(__file__).parent
     html_1 = tests.joinpath('html-1.html').read_text()
     html_2 = tests.joinpath('html-2.html').read_text()
@@ -66,5 +68,7 @@ def test_speed():
     t0 = time.time()
     for _ in range(n_runs):
         # as_tree speed is almost the same, so don't bother to check
-        extract_html_diff.as_string(html_1, html_2)
-    print('as_string speed: {:.2f} pages/s'.format(n_runs / (time.time() - t0)))
+        extract_html_diff.as_string(html_1, html_2,
+                                    apply_to_siblings=apply_to_siblings)
+    print('as_string apply_to_siblings={} speed: {:.2f} pages/s'
+          .format(apply_to_siblings, n_runs / (time.time() - t0)))

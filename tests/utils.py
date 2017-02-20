@@ -4,9 +4,9 @@ import extract_html_diff
 from extract_html_diff.utils import tree_to_string
 
 
-def diff_test(html, other_html, expected):
+def diff_test(html, other_html, expected, **kwargs):
     assert_elements_equal(
-        extract_html_diff.as_tree(html, other_html),
+        extract_html_diff.as_tree(html, other_html, **kwargs),
         fromstring(expected))
 
 
