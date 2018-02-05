@@ -53,3 +53,9 @@ you plan to do additional transformations or change serialization::
 You can pass input html as ``str`` or ``bytes``
 (it will be parsed with ``lxml.html.fromstring`` in this case), or as an already parsed
 ``lxml.html.HtmlElement``.
+
+----
+
+.. image:: https://hyperiongray.s3.amazonaws.com/define-hg.svg
+	:target: https://hyperiongray.com/?pk_campaign=github&pk_kwd=extract-html-diff
+	:alt: define hyperiongray
