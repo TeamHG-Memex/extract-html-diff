@@ -1,0 +1,9 @@
+./setup.py
+./AGENTS.md
+./extract_html_diff/diff.py
+./extract_html_diff/utils.py
+./extract_html_diff/__init__.py
+./tests/test_diff.py
+./tests/utils.py
+./tests/test_test_utils.py
+./tests/__init__.py
